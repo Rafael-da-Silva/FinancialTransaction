@@ -1,93 +1,71 @@
 # FinancialTransaction
 
-## Descrição do Projeto
+Neste projeto, foram utilizados os seguintes padrões de projeto e princípios de design:
 
-O projeto FinancialTransaction é uma implementação Python de um sistema de transações financeiras que segue as melhores práticas de programação, princípios SOLID e utiliza padrões de projeto para fornecer uma solução robusta e extensível. Esse sistema permite a realização de transações financeiras entre contas, com validações avançadas, registro de eventos e flexibilidade para adicionar novos recursos.
+## Padrão Observer
+O padrão Observer foi implementado para permitir que várias partes do sistema observem e reajam a eventos, como a notificação de transações bem-sucedidas ou canceladas. O Logger atua como o sujeito observável, enquanto o ConsoleLogger atua como o observador que recebe notificações.
 
-## Princípios e Padrões de Projeto
+## Princípio SOLID
+Vários princípios do SOLID são aplicados no projeto:
 
-Neste projeto, aplicamos vários princípios e padrões de projeto, incluindo:
+- **Single Responsibility Principle (SRP)**: As classes têm responsabilidades únicas e bem definidas, como AccountRepository para operações de conta, Logger para registro de eventos e TransactionUseCase para manipulação de transações.
 
-- **Padrão Observer**: Implementamos o padrão Observer para permitir que várias partes do sistema observem e reajam a eventos, como a notificação de transações bem-sucedidas ou canceladas. O Logger atua como o sujeito observável, enquanto o ConsoleLogger atua como o observador que recebe notificações.
+- **Open/Closed Principle (OCP)**: O código é projetado para ser extensível sem modificação. Você pode adicionar novos observadores, manipuladores ou classes relacionadas sem modificar o código existente.
 
-- **Princípios SOLID**: Vários princípios do SOLID são aplicados no projeto:
-  - **Princípio da Responsabilidade Única (SRP)**: Cada classe tem uma única responsabilidade bem definida, como AccountRepository para operações de conta, Logger para registro de eventos e TransactionUseCase para manipulação de transações.
-  - **Princípio Aberto/Fechado (OCP)**: O código é projetado para ser extensível sem modificação. Você pode adicionar novos observadores, manipuladores ou classes relacionadas sem modificar o código existente.
-  - **Princípio de Substituição de Liskov (LSP)**: As classes derivadas, como ConsoleLogger, podem ser substituídas pelas classes base, como Observer, sem causar problemas.
-  - **Princípio de Segregação de Interface (ISP)**: As interfaces são projetadas de forma coesa, contendo métodos relevantes apenas para seus observadores.
+- **Liskov Substitution Principle (LSP)**: As classes derivadas, como ConsoleLogger, podem ser substituídas pelas classes base, como Observer, sem causar problemas.
 
-- **Padrão de Repositório**: Implementamos o padrão de repositório na classe AccountRepository, que isola a lógica de acesso aos dados das contas, tornando-a independente de como os dados são armazenados.
+- **Interface Segregation Principle (ISP)**: Interfaces são projetadas de forma coesa e com métodos relevantes apenas para seus observadores.
 
-- **Padrão de Injeção de Dependência**: Aplicamos o princípio de injeção de dependência ao passar as dependências (por exemplo, AccountRepository e Logger) para as classes que delas dependem (por exemplo, TransactionUseCase). Isso torna o código mais testável e flexível.
+## Padrão de Repositório
+O padrão de repositório é implementado na classe AccountRepository, que isola a lógica de acesso aos dados das contas, tornando-a independente de como os dados são armazenados.
 
-- **Padrão de Comando**: O TransactionUseCase age como um manipulador de comandos que executa transações. Ele decide como executar uma transação com base em regras de negócios.
+## Padrão de Injeção de Dependência
+O princípio de injeção de dependência é aplicado ao passar as dependências (por exemplo, AccountRepository e Logger) para as classes que delas dependem (por exemplo, TransactionUseCase). Isso torna o código mais testável e flexível.
 
-- **Princípio de Responsabilidade Única**: As classes são projetadas com responsabilidades únicas e bem definidas, promovendo a coesão e facilitando a manutenção.
+## Padrão de Comando
+O TransactionUseCase age como um manipulador de comandos que executa transações. Ele decide como executar uma transação com base em regras de negócios.
 
-- **Princípio da Inversão de Dependência**: O código segue o princípio da inversão de dependência, onde depende de abstrações em vez de implementações concretas. Por exemplo, TransactionUseCase depende de interfaces (AccountRepository e Logger) em vez de implementações concretas.
+## Clean Architecture
+Este projeto segue os princípios do Clean Architecture, que organiza o código em camadas bem definidas, promovendo a separação de responsabilidades e a flexibilidade do sistema. As principais camadas incluem:
 
-## Componentes Principais
+- **Entidades (Entities)**: Contêm as entidades de domínio do sistema, como Account e Transaction.
 
-### 1. AccountRepository (repositories/account_repository.py)
+- **Casos de Uso (Use Cases)**: Representam as funcionalidades principais do sistema e contêm a lógica de negócios, como TransactionUseCase.
 
-O AccountRepository é responsável por armazenar os saldos das contas e fornece métodos para acessar e atualizar esses saldos. Ele utiliza um dicionário para manter o mapeamento de IDs de contas para saldos.
+- **Interface de Usuário (UI)**: Pode ser adicionada para interagir com o usuário.
 
-**Vantagens**:
+- **Controladores (Controllers)**: Controlam as interações da interface de usuário.
 
-- **Abstração de Dados**: O AccountRepository isola a lógica de acesso aos dados das contas, tornando-o independente de como os dados são armazenados. Isso facilita a troca de fontes de dados, como bancos de dados, sem afetar o restante do código.
-- **Facilidade de Testes**: Como a lógica de acesso aos dados é encapsulada, é mais fácil escrever testes unitários para o código que depende do repositório de contas.
+- **Frameworks e Drivers**: Detalhes de implementação específicos, como bancos de dados.
 
-### 2. Logger (logger/logger.py)
+- **Infraestrutura (Infrastructure)**: Detalhes de implementação de baixo nível, como acesso a recursos externos.
 
-O Logger é uma classe abstrata que implementa o padrão Observer. Ele permite que observadores, como o ConsoleLogger, sejam anexados para receber notificações quando eventos ocorrem.
+A estrutura do Clean Architecture promove a separação de responsabilidades, facilita a testabilidade, permite a substituição de componentes sem afetar outros e mantém uma clara dependência das camadas internas para as externas.
 
-**Vantagens**:
+## Pontos Fortes
 
-- **Desacoplamento**: O padrão Observer permite que o código que gera eventos (no caso, transações bem-sucedidas ou canceladas) esteja desacoplado dos observadores. Isso significa que você pode adicionar ou remover observadores sem alterar o código do emissor de eventos.
-- **Flexibilidade**: Você pode facilmente estender o sistema para adicionar outros tipos de observadores, como registradores de eventos em arquivo, notificações por email, etc.
+- Separação de Responsabilidades: A implementação segue os princípios do SOLID, com responsabilidades bem definidas para cada classe. As classes são coesas e têm funções específicas.
 
-### 3. TransactionUseCase (use_cases/transaction_use_case.py)
+- Padrão de Projeto Observer: A implementação utiliza o padrão Observer para notificar observadores sobre eventos, como o registro de log. Isso permite a extensibilidade ao adicionar novos observadores sem modificar o código existente.
 
-O TransactionUseCase é o componente central do projeto. Ele lida com a lógica de execução das transações e atualização dos saldos das contas.
+- Validade Avançada: A implementação realiza validações detalhadas, verificando se as contas de origem e destino existem, se os valores da transação são válidos e se não há campos nulos na transação.
 
-**Vantagens**:
+- Log Centralizado: A classe LoggerService fornece um mecanismo centralizado para registro de log em todo o projeto, facilitando o gerenciamento e a consistência das mensagens de log.
 
-- **Separação de Responsabilidades**: O TransactionUseCase cumpre o princípio de responsabilidade única e concentra-se na lógica de execução de transações. Ele delega a lógica de registro de eventos e manipulação de saldo a outros componentes.
-- **Injeção de Dependência**: Ele aceita as dependências (um repositório de contas e um logger) como parâmetros no construtor, seguindo o princípio de injeção de dependência, tornando-o mais flexível e testável.
-- **Testabilidade**: A lógica de execução de transações é isolada em uma classe independente, o que facilita a escrita de testes unitários para essa funcionalidade específica.
+- Singleton: A classe LoggerService é implementada como um singleton, garantindo que haja apenas uma instância global do logger em todo o projeto.
 
-## Pontos Fortes do Projeto
+- Injeção de Dependência: A injeção de dependência é utilizada para fornecer instâncias necessárias, como LoggerService, às classes que delas dependem. Isso torna o código mais testável e flexível.
 
-O projeto FinancialTransaction apresenta diversos pontos fortes:
+- Tratamento de Erros: A implementação trata erros adequadamente, registrando mensagens de erro no log quando ocorrem situações problemáticas, como transações canceladas.
 
-- **Separação de Responsabilidades**: A implementação segue os princípios do SOLID, com responsabilidades bem definidas para cada classe. As classes são coesas e têm funções específicas.
-- **Padrão de Projeto Observer**: A implementação utiliza o padrão Observer para notificar observadores sobre eventos, como o registro de log. Isso permite a extensibilidade ao adicionar novos observadores sem modificar o código existente.
-- **Validação Avançada**: A implementação realiza validações detalhadas, verificando se as contas de origem e destino existem, se os valores da transação são válidos e se não há campos nulos na transação.
-- **Log Centralizado**: A classe LoggerService fornece um mecanismo centralizado para registro de log em todo o projeto, facilitando o gerenciamento e a consistência das mensagens de log.
-- **Singleton**: A classe LoggerService é implementada como um singleton, garantindo que haja apenas uma instância global do logger em todo o projeto.
-- **Injeção de Dependência**: A injeção de dependência é utilizada para fornecer instâncias necessárias, como LoggerService, às classes que delas dependem. Isso torna o código mais testável e flexível.
-- **Tratamento de Erros**: A implementação trata erros adequadamente, registrando mensagens de erro no log quando ocorrem situações problemáticas, como transações canceladas.
-- **Testabilidade**: A estrutura do código facilita a escrita de testes unitários para as diferentes partes do sistema, garantindo a confiabilidade e robustez do software.
-- **Tipagem Forte**: A utilização de anotações de tipo (typing hints) ajuda a melhorar a legibilidade e a manutenção do código Python.
-- **Linguagem de Alto Nível**: O código está escrito em uma linguagem de alto nível (Python), o que torna a implementação mais acessível e legível.
-- **Documentação e Comentários**: A implementação contém comentários que explicam a lógica e o propósito de várias partes do código, facilitando a compreensão e a manutenção.
-- **Segurança e Consistência**: A adição de validações de segurança, como a verificação de campos nulos, ajuda a garantir a consistência dos dados e evita erros inesperados.
-- **Padrões de Projeto**: A implementação segue padrões de projeto como Singleton, Observer e Injeção de Dependência, o que melhora a organização e a manutenibilidade do código.
+- Testabilidade: A estrutura do código facilita a escrita de testes unitários para as diferentes partes do sistema, garantindo a confiabilidade e robustez do software.
 
-## Como Executar o Projeto
+- Tipagem Forte: A utilização de anotações de tipo (typing hints) ajuda a melhorar a legibilidade e a manutenção do código Python.
 
-Para executar o projeto, siga as instruções abaixo:
+- Linguagem de Alto Nível: O código está escrito em uma linguagem de alto nível (Python), o que torna a implementação mais acessível e legível.
 
-1. Clone o repositório para o seu ambiente local.
-2. Certifique-se de que você possui o Python instalado em seu sistema.
-3. Navegue até o diretório raiz do projeto.
-4. Execute o script `main.py` para executar o programa.
+- Documentação e Comentários: A implementação contém comentários que explicam a lógica e o propósito de várias partes do código, facilitando a compreensão e a manutenção.
 
-## Contribuição
+- Segurança e Consistência: A adição de validações de segurança, como a verificação de campos nulos, ajuda a garantir a consistência dos dados e evita erros inesperados.
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir um problema ou enviar um pull request com melhorias ou novos recursos.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
-
+- Padrões de Projeto: A implementação segue padrões de projeto como Singleton, Observer e Injeção de Dependência, o que melhora a organização e a manutenibilidade do código.
